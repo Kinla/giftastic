@@ -39,6 +39,17 @@ String.prototype.toProperCase = function() {
     return results.join(' ');
 };
 
+//removing GIF and everything after from title
+String.prototype.removeWord = function(searchWord){
+    var str = this;
+    var n = str.search(searchWord);
+    while(str.search(searchWord) > -1){
+        n = str.search(searchWord);
+        str = str.substring(0, n);
+    }
+    return str.trim();
+}
+
 //display GIF when button clicked
 $("body").on("click", ".topic", function(){
     var apikey = "Ysk8hAo1O9ZJOdm0aKEeWGJeYeP3KT7M";
@@ -59,13 +70,12 @@ $("body").on("click", ".topic", function(){
     })
     .then(function(response) {
         var giphy = response.data;
-        $("#gifs").empty();
-        console.log(giphy);
 
         for (var i = 0; i < 10; i++){
             var stillGIF = giphy[i].images.fixed_width_still.url;
             var animateGIF = giphy[i].images.fixed_width.url;
             var rating = giphy[i].rating.toUpperCase();
+            var title = giphy[i].title.removeWord("GIF").toProperCase();
 
             var card = $("<div>").addClass("card")
             var img = $("<img>")
@@ -78,12 +88,15 @@ $("body").on("click", ".topic", function(){
             });
 
             var cardBody = $("<div>").addClass("card-body");
+            var showTitle = $("<h5>").addClass("card-title text-center").html(title);
+            var dlIcon = $("<i>").addClass("fas fa-download");
             var gifRating = $("<p>").addClass("card-text text-center").text("GIF rating: " + rating);
 
             $("#gifs")
             .append(card
                 .append(img)
                 .append(cardBody
+                    .append(showTitle)
                     .append(gifRating)
                 )
             )
@@ -122,6 +135,7 @@ $("#more").on("click", function(){
             var stillGIF = giphy[i].images.fixed_width_still.url;
             var animateGIF = giphy[i].images.fixed_width.url;
             var rating = giphy[i].rating.toUpperCase();
+            var title = giphy[i].title.removeWord("GIF").toProperCase();
 
             var card = $("<div>").addClass("card")
             var img = $("<img>")
@@ -134,12 +148,15 @@ $("#more").on("click", function(){
             });
 
             var cardBody = $("<div>").addClass("card-body");
+            var showTitle = $("<h5>").addClass("card-title text-center").html(title);
+            var dlIcon = $("<i>").addClass("fas fa-download");
             var gifRating = $("<p>").addClass("card-text text-center").text("GIF rating: " + rating);
 
             $("#gifs")
             .append(card
                 .append(img)
                 .append(cardBody
+                    .append(showTitle)
                     .append(gifRating)
                 )
             )
