@@ -68,11 +68,16 @@ $("body").on("click", ".gif", function(){
 });
 
 $("#submit").on("click", function(){
-    var show = $("#userShow").val().trim().toProperCase();
-    topics.push(show);
+    event.preventDefault();
+    
+    if ($("#userShow").val() !== ""){
+        var show = $("#userShow").val().trim().toProperCase();
+        topics.push(show);
+    
+        makeBtn();
+        $("#userShow").val("");
 
-    makeBtn();
-    $("#userShow").val("");
+    } else {alert("Enter a TV Show name.")};
 });
 
 String.prototype.toProperCase = function() {
