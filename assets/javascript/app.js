@@ -3,7 +3,8 @@ var topics = ["Star Trek", "Friends", "I Love Lucy", "Game of Thornes", "Stargat
 
 //ready page
 $(document).ready(function(){
-        makeBtn();
+    sessionStorage.clear();
+    makeBtn();
 });
 
 //make the buttons from gif list
@@ -63,22 +64,35 @@ $("body").on("click", ".topic", function(){
     //reset more value in case users wants more
     more = 10;
 
+    //reset div
+    $("#gifs").empty();
+
     //the ajax call
     $.ajax({
         url: queryURL,
         method: "GET"
     })
     .then(function(response) {
-        var giphy = response.data;
+        jsonDisplay(response);
+    });
+    
+});
 
-        for (var i = 0; i < 10; i++){
-            var stillGIF = giphy[i].images.fixed_width_still.url;
-            var animateGIF = giphy[i].images.fixed_width.url;
-            var rating = giphy[i].rating.toUpperCase();
-            var title = giphy[i].title.removeWord("GIF").toProperCase();
+//assign unique GIF ID
+var gifID = 0;
 
-            var card = $("<div>").addClass("card")
-            var img = $("<img>")
+
+function jsonDisplay(response){
+    var giphy = response.data;
+
+    for (var i = 0; i < 10; i++){
+        var stillGIF = giphy[i].images.fixed_width_still.url;
+        var animateGIF = giphy[i].images.fixed_width.url;
+        var rating = giphy[i].rating.toUpperCase();
+        var title = giphy[i].title.removeWord("GIF").toProperCase();
+
+        var card = $("<div>").addClass("card")
+        var img = $("<img>")
             .addClass("card-img-top gif")
             .attr({
                 "src": stillGIF,
@@ -87,24 +101,40 @@ $("body").on("click", ".topic", function(){
                 "data-state": "still",
             });
 
-            var cardBody = $("<div>").addClass("card-body");
-            var showTitle = $("<h5>").addClass("card-title text-center").html(title);
-            var dlIcon = $("<i>").addClass("fas fa-download");
-            var gifRating = $("<p>").addClass("card-text text-center").text("GIF rating: " + rating);
+        var cardBody = $("<div>").addClass("card-body");
+        var showTitle = $("<h5>").addClass("card-title text-center").html(title);
+        var imgOverlay = $("<div>").addClass("card-img-overlay pt-2 px-1 text-right text-light");
+        var download = $("<i>")
+            .addClass("fas fa-download mx-1 save")
+            .attr({
+                "data-url": animateGIF,
+                "data-id": gifID,
+            });
+        var favorite = $("<i>")
+            .addClass("far fa-heart mx-1")
+            .attr({
+                "data-id": gifID,
+            });
+        var gifRating = $("<h6>").addClass("card-subtitle text-center text-muted").text("GIF rating: " + rating);
 
-            $("#gifs")
-            .append(card
-                .append(img)
-                .append(cardBody
-                    .append(showTitle)
-                    .append(gifRating)
-                )
+        $("#gifs")
+        .append(card
+            .append(img)
+            .append(imgOverlay
+                .append(download)
+                .append(favorite)
             )
-
-        }
-    });
+            .append(cardBody
+                .append(showTitle)
+                .append(gifRating)
+            )
+        )
     
-});
+    gifID++    
+    }
+};
+
+
 
 //toggle still/animate version of GIF
 $("body").on("click", ".gif", function(){
@@ -129,43 +159,9 @@ $("#more").on("click", function(){
         method: "GET"
     })
     .then(function(response) {
-        var giphy = response.data;
-
-        for (var i = 0; i < 10; i++){
-            var stillGIF = giphy[i].images.fixed_width_still.url;
-            var animateGIF = giphy[i].images.fixed_width.url;
-            var rating = giphy[i].rating.toUpperCase();
-            var title = giphy[i].title.removeWord("GIF").toProperCase();
-
-            var card = $("<div>").addClass("card")
-            var img = $("<img>")
-            .addClass("card-img-top gif")
-            .attr({
-                "src": stillGIF,
-                "data-still": stillGIF,
-                "data-animate": animateGIF,
-                "data-state": "still",
-            });
-
-            var cardBody = $("<div>").addClass("card-body");
-            var showTitle = $("<h5>").addClass("card-title text-center").html(title);
-            var dlIcon = $("<i>").addClass("fas fa-download");
-            var gifRating = $("<p>").addClass("card-text text-center").text("GIF rating: " + rating);
-
-            $("#gifs")
-            .append(card
-                .append(img)
-                .append(cardBody
-                    .append(showTitle)
-                    .append(gifRating)
-                )
-            )
-
-        }
+        jsonDisplay(response);
     });
-
     //increment by 10 per click
     more += 10;
 
 });
-
