@@ -84,6 +84,7 @@ var gifID = 0;
 
 function jsonDisplay(response){
     var giphy = response.data;
+    console.log(giphy);
 
     for (var i = 0; i < 10; i++){
         var stillGIF = giphy[i].images.fixed_width_still.url;
@@ -91,7 +92,7 @@ function jsonDisplay(response){
         var rating = giphy[i].rating.toUpperCase();
         var title = giphy[i].title.removeWord("GIF").toProperCase();
 
-        var card = $("<div>").addClass("card")
+        var card = $("<div>").addClass("card text-center")
         var img = $("<img>")
             .addClass("card-img-top gif")
             .attr({
@@ -102,32 +103,30 @@ function jsonDisplay(response){
             });
 
         var cardBody = $("<div>").addClass("card-body");
-        var showTitle = $("<h5>").addClass("card-title text-center").html(title);
-        var imgOverlay = $("<div>").addClass("card-img-overlay pt-2 px-1 text-right text-light");
-        var download = $("<i>")
-            .addClass("fas fa-download mx-1 save")
+        var showTitle = $("<h5>").addClass("card-title").html(title);
+        var download =$("<a>")
+            .addClass("fas fa-download mx-1 save text-warning")
             .attr({
-                "data-url": animateGIF,
-                "data-id": gifID,
+                "href": animateGIF,
+                "download": "giphy",
             });
         var favorite = $("<i>")
-            .addClass("far fa-heart mx-1")
+            .addClass("far fa-heart mx-1 text-warning")
             .attr({
                 "data-id": gifID,
             });
-        var gifRating = $("<h6>").addClass("card-subtitle text-center text-muted").text("GIF rating: " + rating);
+        var gifRating = $("<h6>").addClass("card-subtitle text-muted").text("GIF rating: " + rating);
 
         $("#gifs")
         .append(card
             .append(img)
-            .append(imgOverlay
-                .append(download)
-                .append(favorite)
-            )
             .append(cardBody
                 .append(showTitle)
                 .append(gifRating)
+                .append(favorite)
+                .append(download)
             )
+
         )
     
     gifID++    
@@ -152,7 +151,7 @@ $("body").on("click", ".gif", function(){
 var more = 10;
 
 $("#more").on("click", function(){
-    var queryURL = sessionStorage.getItem("url", queryURL) + more;
+    var queryURL = sessionStorage.getItem("url") + more;
 
     $.ajax({
         url: queryURL,
