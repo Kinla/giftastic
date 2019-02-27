@@ -75,7 +75,11 @@ $("body").on("click", ".topic", function(){
     .then(function(response) {
         jsonDisplay(response);
     });
-    
+
+    //adding google knowledge search graph api
+    var apikeyGoogle = "AIzaSyDRjr7I7-G47aLjMpSaFl27trUzUNIyYd0"
+    var queryURLGoogle = "https://kgsearch.googleapis.com/v1/entities:search?query=" + search + "&key=" + apikeyGoogle
+    console.log(queryURLGoogle)
 });
 
 //assign unique GIF ID
@@ -107,7 +111,7 @@ function jsonDisplay(response){
         var download =$("<a>")
             .addClass("fas fa-download mx-1 save text-warning")
             .attr({
-                "href": animateGIF,
+                "data-href": animateGIF,
                 "download": "giphy",
             });
         var favorite = $("<i>")
@@ -164,3 +168,32 @@ $("#more").on("click", function(){
     more += 10;
 
 });
+
+//trigger download on click for <a> save
+$("body").on("click", ".save", function(){
+        var filename = $(this).attr("data-href").split('\\').pop().split('/').pop();
+        console.log(filename)
+        fetch($(this).attr("data-href"), {
+            headers: new Headers({
+              'Origin': location.origin
+            }),
+            mode: 'cors'
+          })
+          .then(response => response.blob())
+          .then(blob => {
+            let blobUrl = window.URL.createObjectURL(blob);
+            forceDownload(blobUrl, filename);
+          })
+          .catch(e => console.error(e));      
+});
+
+//set up forceDownload function
+function forceDownload(blob, filename) {
+    var a = document.createElement('a');
+    a.download = filename;
+    a.href = blob;
+    // For Firefox https://stackoverflow.com/a/32226068
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  }

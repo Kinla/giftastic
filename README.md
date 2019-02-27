@@ -64,8 +64,7 @@ Attempt to complete homework assignment as described in instructions. If unable 
 
 - [x] 3. List additional metadata (title, tags, etc) for each gif in a clean and readable format.
 
-- [ ] 4. Include a 1-click download button for each gif, this should work across device types.
-  * _Giving up on this_
+- [x] 4. Include a 1-click download button for each gif, this should work across device types.
 
 5. Integrate this search with additional APIs such as OMDB, or Bands in Town. Be creative and build something you are proud to showcase in your portfolio
 
