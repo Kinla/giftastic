@@ -1,10 +1,12 @@
 //set up gif list
-var topics = ["Star Trek", "Friends", "I Love Lucy", "Game of Thornes", "Stargate", "Firefly", "Sherlock"];
+var topics = ["Star Trek", "Friends", "I Love Lucy", "Game of Thrones", "Stargate SG-1", "Firefly", "Sherlock"];
 
 //ready page
 $(document).ready(function(){
     sessionStorage.clear();
     makeBtn();
+    $("#google").empty()
+
 });
 
 //make the buttons from gif list
@@ -54,39 +56,87 @@ String.prototype.removeWord = function(searchWord){
 //display GIF when button clicked
 $("body").on("click", ".topic", function(){
     var apikey = "Ysk8hAo1O9ZJOdm0aKEeWGJeYeP3KT7M";
-    var search = $(this).text().trim().replace(" ", "+");
+    var search = $(this).text().trim().split(" ").join("+");
+    var name = $(this).text();
     var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + search + "&api_key=" + apikey + "&limit=10&offset=";
 
     //use session storage to save URL
     sessionStorage.clear();
     sessionStorage.setItem("url", queryURL);
 
-    //reset more value in case users wants more
+    //adding google knowledge search graph api
+    var apikeyGoogle = "AIzaSyDRjr7I7-G47aLjMpSaFl27trUzUNIyYd0"
+    var types = "TVSeries"
+    var queryURLGoogle = "https://kgsearch.googleapis.com/v1/entities:search?query=" + search + "&key=" + apikeyGoogle + "&types=" + types
+    console.log(queryURLGoogle)
+
+    $.ajax({
+        url: queryURLGoogle,
+        method: "GET"
+    })
+    .then(function(response) {
+        
+        var description = response.itemListElement[0].result.detailedDescription.articleBody
+        var wikiURL = response.itemListElement[0].result.detailedDescription.url
+        var officialSite = response.itemListElement[0].result.url
+        console.log(description, wikiURL, officialSite)
+        
+        //creating the DOM elements
+        var jumbotron = $("<div>").addClass("jumbotron mt-2").attr("id", "jumbo");
+        var title = $("<h3>").addClass("display-4").text(name);
+        var content = $("<p>").addClass("lead").text(description);
+        var wiki = $("<a>").addClass("btn btn-warning mr-3").text("Wikipedia Page")
+            .attr({
+                "href": wikiURL,
+                "target": "_blank",
+                "role": "button"
+            });
+        var site = $("<a>").addClass("btn btn-warning").text("Official Website")
+        .attr({
+            "href": officialSite,
+            "target": "_blank",
+            "role": "button"
+        });
+
+        $("#google").empty()
+
+        $("#google")
+        .append(jumbotron
+            .append(title)
+            .append(content)
+            .append(wiki)
+        
+        )
+
+        if (officialSite){
+            $("#jumbo").append(site)
+        }
+
+    });
+
+    //reset more value to 10 for the gimme more button
     more = 10;
 
     //reset div
     $("#gifs").empty();
 
-    //the ajax call
+    //the ajax call for giphy
     $.ajax({
         url: queryURL,
         method: "GET"
     })
     .then(function(response) {
-        jsonDisplay(response);
+        giphyJsonDisplay(response);
     });
 
-    //adding google knowledge search graph api
-    var apikeyGoogle = "AIzaSyDRjr7I7-G47aLjMpSaFl27trUzUNIyYd0"
-    var queryURLGoogle = "https://kgsearch.googleapis.com/v1/entities:search?query=" + search + "&key=" + apikeyGoogle
-    console.log(queryURLGoogle)
+
+    
+
 });
 
-//assign unique GIF ID
-var gifID = 0;
 
-
-function jsonDisplay(response){
+//function to get and display stuff from Giphy
+function giphyJsonDisplay(response){
     var giphy = response.data;
     console.log(giphy);
 
@@ -108,16 +158,18 @@ function jsonDisplay(response){
 
         var cardBody = $("<div>").addClass("card-body");
         var showTitle = $("<h5>").addClass("card-title").html(title);
-        var download =$("<a>")
+        var download =$("<i>")
             .addClass("fas fa-download mx-1 save text-warning")
             .attr({
                 "data-href": animateGIF,
-                "download": "giphy",
+                "data-title": title.split(" ").join("_")
             });
         var favorite = $("<i>")
             .addClass("far fa-heart mx-1 text-warning")
             .attr({
-                "data-id": gifID,
+                "data-href": animatedGIF,
+                "favorite": false,
+                "role": "button"
             });
         var gifRating = $("<h6>").addClass("card-subtitle text-muted").text("GIF rating: " + rating);
 
@@ -162,7 +214,7 @@ $("#more").on("click", function(){
         method: "GET"
     })
     .then(function(response) {
-        jsonDisplay(response);
+        giphyJsonDisplay(response);
     });
     //increment by 10 per click
     more += 10;
@@ -171,7 +223,7 @@ $("#more").on("click", function(){
 
 //trigger download on click for <a> save
 $("body").on("click", ".save", function(){
-        var filename = $(this).attr("data-href").split('\\').pop().split('/').pop();
+        var filename = $(this).attr("data-title");
         console.log(filename)
         fetch($(this).attr("data-href"), {
             headers: new Headers({
@@ -192,7 +244,6 @@ function forceDownload(blob, filename) {
     var a = document.createElement('a');
     a.download = filename;
     a.href = blob;
-    // For Firefox https://stackoverflow.com/a/32226068
     document.body.appendChild(a);
     a.click();
     a.remove();

@@ -66,7 +66,7 @@ Attempt to complete homework assignment as described in instructions. If unable 
 
 - [x] 4. Include a 1-click download button for each gif, this should work across device types.
 
-5. Integrate this search with additional APIs such as OMDB, or Bands in Town. Be creative and build something you are proud to showcase in your portfolio
+- [x] Integrate this search with additional APIs such as OMDB, or Bands in Town. Be creative and build something you are proud to showcase in your portfolio
 
 6. Allow users to add their favorite gifs to a `favorites` section.
    * This should persist even when they select or add a new topic.
