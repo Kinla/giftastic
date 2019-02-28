@@ -4,9 +4,12 @@ var topics = ["Star Trek", "Friends", "I Love Lucy", "Game of Thrones", "Stargat
 //ready page
 $(document).ready(function(){
     sessionStorage.removeItem("url");
+    
     makeBtn();
-    $("#omdb").empty()
-    sessionFav();
+
+    if(sessionStorage.length > 0) {
+        sessionFav();
+    };
 
 });
 
