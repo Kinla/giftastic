@@ -13,7 +13,7 @@ $(document).ready(function(){
 function makeBtn(){
     $("#gifBtns").empty();
     for (i = 0; i < topics.length; i++){
-        $("<button>").attr("id", "topic_" + i).addClass("topic btn btn-warning m-2").text(topics[i]).appendTo($("#gifBtns"));
+        $("<button>").addClass("topic btn btn-warning m-2").text(topics[i]).appendTo($("#gifBtns"));
     };    
 };
 
@@ -193,7 +193,7 @@ function giphyJsonDisplay(response){
 
 
 //toggle still/animate version of GIF
-$("body").on("click", ".overlay", function(){
+$("body").on("click", ".overlay", function(event){
     var parent = $(event.target).parent();
     var gif = parent.find(".gif");
     var state = gif.attr("data-state");
@@ -206,9 +206,10 @@ $("body").on("click", ".overlay", function(){
 
 });
 
-//Set up button for 10 more gif everytime clicked need to figure out if this can be DRY?
+//Set up for 10 more gif
 var more = 10;
 
+//click event to call for 10 more gifs
 $("#more").on("click", function(){
     var queryURL = sessionStorage.getItem("url") + more;
 
