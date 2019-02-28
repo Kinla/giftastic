@@ -155,7 +155,7 @@ function giphyJsonDisplay(response){
                 "data-animate": animateGIF,
                 "data-state": "still",
             });
-
+        var overlay =  $("<div>").addClass("card-img-overlay p-2 text-right overlay");
         var cardBody = $("<div>").addClass("card-body");
         var showTitle = $("<h5>").addClass("card-title").html(title);
         var download =$("<i>")
@@ -176,12 +176,14 @@ function giphyJsonDisplay(response){
         $("#gifs")
         .append(card
             .append(img)
-            .append(cardBody
-                .append(showTitle)
-                .append(gifRating)
+            .append(overlay
                 .append(favorite)
                 .append(download)
             )
+            .append(cardBody
+                .append(showTitle)
+                .append(gifRating)
+                )
 
         )
     
@@ -191,13 +193,15 @@ function giphyJsonDisplay(response){
 
 
 //toggle still/animate version of GIF
-$("body").on("click", ".gif", function(){
-    var state = $(this).attr("data-state")
+$("body").on("click", ".overlay", function(){
+    var parent = $(event.target).parent();
+    var gif = parent.find(".gif");
+    var state = gif.attr("data-state");
 
     if (state === "still"){
-        $(this).attr("src", $(this).attr("data-animate")).attr("data-state", "animate");
+        gif.attr("src", gif.attr("data-animate")).attr("data-state", "animate");
       } else {
-        $(this).attr("src", $(this).attr("data-still")).attr("data-state", "still");
+        gif.attr("src", gif.attr("data-still")).attr("data-state", "still");
       }
 
 });
