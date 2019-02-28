@@ -167,7 +167,7 @@ function giphyJsonDisplay(response){
         var favorite = $("<i>")
             .addClass("far fa-heart mx-1 text-warning")
             .attr({
-                "data-href": animatedGIF,
+                "data-href": animateGIF,
                 "favorite": false,
                 "role": "button"
             });
@@ -185,7 +185,6 @@ function giphyJsonDisplay(response){
 
         )
     
-    gifID++    
     }
 };
 
