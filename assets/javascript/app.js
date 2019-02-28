@@ -5,7 +5,7 @@ var topics = ["Star Trek", "Friends", "I Love Lucy", "Game of Thrones", "Stargat
 $(document).ready(function(){
     sessionStorage.clear();
     makeBtn();
-    $("#google").empty()
+    $("#omdb").empty()
 
 });
 
@@ -26,9 +26,13 @@ $("#submit").on("click", function(){
         topics.push(show);
     
         makeBtn();
+
         $("#userShow").val("");
 
     } else {alert("Enter a TV Show name.")};
+
+    var newBTN = $(this).parent().parent().find(".topic").last();
+    newBTN.click();
 });
 
 //making sure text display of new button has title casing
@@ -55,6 +59,8 @@ String.prototype.removeWord = function(searchWord){
 
 //display GIF when button clicked
 $("body").on("click", ".topic", function(){
+
+    //parameters for giphy
     var apikey = "Ysk8hAo1O9ZJOdm0aKEeWGJeYeP3KT7M";
     var search = $(this).text().trim().split(" ").join("+");
     var name = $(this).text();
@@ -63,56 +69,6 @@ $("body").on("click", ".topic", function(){
     //use session storage to save URL
     sessionStorage.clear();
     sessionStorage.setItem("url", queryURL);
-
-    //adding google knowledge search graph api
-    var apikeyGoogle = "AIzaSyDRjr7I7-G47aLjMpSaFl27trUzUNIyYd0"
-    var types = "TVSeries"
-    var queryURLGoogle = "https://kgsearch.googleapis.com/v1/entities:search?query=" + search + "&key=" + apikeyGoogle + "&types=" + types
-    console.log(queryURLGoogle)
-
-    $.ajax({
-        url: queryURLGoogle,
-        method: "GET"
-    })
-    .then(function(response) {
-        
-        var description = response.itemListElement[0].result.detailedDescription.articleBody
-        var wikiURL = response.itemListElement[0].result.detailedDescription.url
-        var officialSite = response.itemListElement[0].result.url
-        console.log(description, wikiURL, officialSite)
-        
-        //creating the DOM elements
-        var jumbotron = $("<div>").addClass("jumbotron mt-2").attr("id", "jumbo");
-        var title = $("<h3>").addClass("display-4").text(name);
-        var content = $("<p>").addClass("lead").text(description);
-        var wiki = $("<a>").addClass("btn btn-warning mr-3").text("Wikipedia Page")
-            .attr({
-                "href": wikiURL,
-                "target": "_blank",
-                "role": "button"
-            });
-        var site = $("<a>").addClass("btn btn-warning").text("Official Website")
-        .attr({
-            "href": officialSite,
-            "target": "_blank",
-            "role": "button"
-        });
-
-        $("#google").empty()
-
-        $("#google")
-        .append(jumbotron
-            .append(title)
-            .append(content)
-            .append(wiki)
-        
-        )
-
-        if (officialSite){
-            $("#jumbo").append(site)
-        }
-
-    });
 
     //reset more value to 10 for the gimme more button
     more = 10;
@@ -129,7 +85,75 @@ $("body").on("click", ".topic", function(){
         giphyJsonDisplay(response);
     });
 
+    //tryig OMDB again
+    var apikeyOMDB = "trilogy"
+    var queryURLOMDB = "http://www.omdbapi.com/?t=" + search + "&apikey=" + apikeyOMDB + "&plot=short&type=series"
 
+    $.ajax({
+        url: queryURLOMDB,
+        method: "GET"
+    })
+    .then(function(response) {
+        var description = response.Plot;
+        var actors = response.Actors;
+        var rating = response.imdbRating;
+        var genre = response.Genre;
+        var year = response.Year;
+        var rated = response.Rated;
+        var imdbID = response.imdbID
+        var imdbURL = "https://www.imdb.com/title/" + imdbID
+        
+        //creating the DOM elements
+        var jumbotron = $("<div>").addClass("jumbotron mt-2").attr("id", "jumbo");
+        var title = $("<h1>").addClass("display-4").text(name);
+        var meta = $("<p>").text(rated + " | " + genre + " | TV Series(" + year + ") | IMDB Rating " + rating);
+        var star = $("<p>").attr("id", "star").text("Staring: " + actors);
+        var content = $("<p>").addClass("lead").text(description);
+        var imdb = $("<a>").addClass("btn btn-warning mt-2").text("More on IMDB")
+            .attr({
+                "href": imdbURL,
+                "target": "_blank",
+                "role": "button"
+            });
+
+        $("#omdb").empty()
+
+        $("#omdb")
+        .append(jumbotron
+            .append(title)
+            .append(meta)
+            .append(content)
+            .append(star)
+            .append(imdb)      
+        )
+    });
+    
+    //adding google knowledge search graph api
+    var apikeyGoogle = "AIzaSyDRjr7I7-G47aLjMpSaFl27trUzUNIyYd0"
+    var types = "TVSeries"
+    var queryURLGoogle = "https://kgsearch.googleapis.com/v1/entities:search?query=" + search + "&key=" + apikeyGoogle + "&types=" + types
+    $.ajax({
+        url: queryURLGoogle,
+        method: "GET"
+    })
+    .then(function(response) {
+        
+        var officialSite = response.itemListElement[0].result.url
+
+        //creating the DOM elements
+        var site = $("<a>").addClass("btn btn-warning mt-2 mr-3").text("Official Website")
+        .attr({
+            "href": officialSite,
+            "target": "_blank",
+            "role": "button"
+        });
+
+
+        if (officialSite){
+            site.insertAfter("#star")
+        }
+
+    });
     
 
 });
@@ -138,7 +162,6 @@ $("body").on("click", ".topic", function(){
 //function to get and display stuff from Giphy
 function giphyJsonDisplay(response){
     var giphy = response.data;
-    console.log(giphy);
 
     for (var i = 0; i < 10; i++){
         var stillGIF = giphy[i].images.fixed_width_still.url;
@@ -158,17 +181,16 @@ function giphyJsonDisplay(response){
         var overlay =  $("<div>").addClass("card-img-overlay p-2 text-right overlay");
         var cardBody = $("<div>").addClass("card-body");
         var showTitle = $("<h5>").addClass("card-title").html(title);
-        var download =$("<i>")
+        var download =$("<a>")
             .addClass("fas fa-download mx-1 save text-warning")
             .attr({
                 "data-href": animateGIF,
-                "data-title": title.split(" ").join("_")
+                "data-title": title.split(" ").join("_"),
+                "role": "button"
             });
-        var favorite = $("<i>")
-            .addClass("far fa-heart mx-1 text-warning")
+        var favorite = $("<a>")
+            .addClass("far fa-heart mx-1 text-warning favorite")
             .attr({
-                "data-href": animateGIF,
-                "favorite": false,
                 "role": "button"
             });
         var gifRating = $("<h6>").addClass("card-subtitle text-muted").text("GIF rating: " + rating);
@@ -193,8 +215,8 @@ function giphyJsonDisplay(response){
 
 
 //toggle still/animate version of GIF
-$("body").on("click", ".overlay", function(event){
-    var parent = $(event.target).parent();
+$("body").on("click", ".overlay", function(){
+    var parent = $(this).parent();
     var gif = parent.find(".gif");
     var state = gif.attr("data-state");
 
@@ -225,22 +247,22 @@ $("#more").on("click", function(){
 
 });
 
-//trigger download on click for <a> save
-$("body").on("click", ".save", function(){
-        var filename = $(this).attr("data-title");
-        console.log(filename)
-        fetch($(this).attr("data-href"), {
-            headers: new Headers({
-              'Origin': location.origin
-            }),
-            mode: 'cors'
-          })
-          .then(response => response.blob())
-          .then(blob => {
-            let blobUrl = window.URL.createObjectURL(blob);
-            forceDownload(blobUrl, filename);
-          })
-          .catch(e => console.error(e));      
+//trigger download on click for .save
+$("body").on("click", ".save", function(event){
+    event.stopPropagation();
+    var filename = $(this).attr("data-title");
+    fetch($(this).attr("data-href"), {
+        headers: new Headers({
+            'Origin': location.origin
+        }),
+        mode: 'cors'
+        })
+        .then(response => response.blob())
+        .then(blob => {
+        let blobUrl = window.URL.createObjectURL(blob);
+        forceDownload(blobUrl, filename);
+        })
+        .catch(e => console.error(e));      
 });
 
 //set up forceDownload function
@@ -252,3 +274,76 @@ function forceDownload(blob, filename) {
     a.click();
     a.remove();
   }
+
+//set fav counter
+var favIdCount = 0;
+
+//saving to favorite on click .favorite
+$("body").on("click", ".favorite", function(event){
+    event.stopPropagation();
+    var gif = $(this).parent().parent().find(".gif")
+
+
+    if ($(this).hasClass("fas") === false){
+        //change to solid heart
+        $(this).removeClass("far")
+            .addClass("fas")
+            .attr({
+                "data-fav": favIdCount,
+                "id": "heart-" + favIdCount 
+            });
+
+        //get the 2 URLs
+        var still = gif.attr("data-still");
+        var animate = gif.attr("data-animate");
+
+        //Create object for sessionStorage
+        var favGIF = 
+
+        //Set the DOM elements
+        var div = $("<div>")
+            .addClass("card").addClass("mb-2").attr("id", "favID-" + favIdCount);
+        var img = $("<img>")
+            .addClass("gif card-image favImg")
+            .attr({
+                "src": still,
+                "data-still": still,
+                "data-animate": animate,
+                "data-state": "still",
+            });
+
+        var overlay =  $("<div>").addClass("card-img-overlay p-2 text-right overlay");
+
+        var favorite = $("<a>")
+        .addClass("fas fa-heart mx-1 text-warning heartFull")
+        .attr({
+            "role": "button",
+            "data-fav": favIdCount
+        });
+
+
+        $("#favs")
+        .append(div
+            .append(img)
+            .append(overlay
+                .append(favorite)
+            )
+
+        )
+    
+        
+    } else {
+        $(this).removeClass("fas").addClass("far");
+        var count = $(this).attr("data-fav")
+        $("#favID-" + count).remove();
+    }
+
+    favIdCount++
+});
+
+//remove favorite from favorite list
+$("body").on("click", ".heartFull", function(){
+    $(this).parent().parent().remove();
+    var count = $(this).attr("data-fav");
+    $("#heart-" + count).removeClass("fas").addClass("far");
+});
