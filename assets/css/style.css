@@ -2,3 +2,21 @@
     width: 100%;
     height: auto;
 }
+
+
+@media (min-width: 576px) {
+    .card-columns#favs {
+        -webkit-column-count: 3;
+        -moz-column-count: 3;
+        column-count: 3;
+    }
+}
+
+@media (min-width: 768px) {
+    .card-columns#favs {
+        -webkit-column-count: 1;
+        -moz-column-count: 1;
+        column-count: 1;
+    }
+}
+

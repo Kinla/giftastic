@@ -112,7 +112,7 @@ $("body").on("click", ".topic", function(){
     var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + search + "&api_key=" + apikey + "&limit=10&offset=";
 
     //use session storage to save URL
-    sessionStorage.clear();
+    sessionStorage.removeItem("url");
     sessionStorage.setItem("url", queryURL);
 
     //reset more value to 10 for the gimme more button
@@ -328,6 +328,12 @@ $("body").on("click", ".favorite", function(event){
     event.stopPropagation();
     var gif = $(this).parent().parent().find(".gif")
 
+    if (sessionStorage.getItem("count")){
+        favIdCount = sessionStorage.getItem("count")
+    } else {
+        favIdCount = 0
+    }
+
 
     if ($(this).hasClass("fas") === false){
         //change to solid heart
@@ -350,6 +356,8 @@ $("body").on("click", ".favorite", function(event){
 
         var favGIFStr = JSON.stringify(favGIF);
         sessionStorage.setItem("fav-" + favIdCount, favGIFStr);
+
+        // favIdCount in session storage
 
         console.log(favGIF, favGIFStr)
 
@@ -391,7 +399,9 @@ $("body").on("click", ".favorite", function(event){
         $("#favID-" + count).remove();
     }
 
-    favIdCount++
+    favIdCount++;
+    sessionStorage.setItem("count", favIdCount);
+
 });
 
 //remove favorite from favorite list
