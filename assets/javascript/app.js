@@ -3,9 +3,10 @@ var topics = ["Star Trek", "Friends", "I Love Lucy", "Game of Thrones", "Stargat
 
 //ready page
 $(document).ready(function(){
-    sessionStorage.clear();
+    sessionStorage.removeItem("url");
     makeBtn();
     $("#omdb").empty()
+    sessionFav();
 
 });
 
@@ -17,6 +18,47 @@ function makeBtn(){
     };    
 };
 
+//fill fav section with sessionStorage info
+function sessionFav(){
+    for (var i = 0; i < 10000; i++){
+        var favStr = sessionStorage.getItem( "fav-" + i);
+        var favObj = JSON.parse(favStr);
+
+        var still = favObj.still;
+        var animate = favObj.animate;
+
+        var div = $("<div>")
+            .addClass("card").addClass("mb-2");
+        var img = $("<img>")
+            .addClass("gif card-image favImg")
+            .attr({
+                "src": still,
+                "data-still": still,
+                "data-animate": animate,
+                "data-state": "still",
+            });
+
+        var overlay =  $("<div>").addClass("card-img-overlay p-2 text-right overlay");
+
+        var favorite = $("<a>")
+        .addClass("fas fa-heart mx-1 text-warning")
+        .attr({
+            "role": "button",
+        });
+
+
+        $("#favs")
+        .append(div
+            .append(img)
+            .append(overlay
+                .append(favorite)
+            )
+
+        )
+
+    }
+
+}
 //let user create new button
 $("#submit").on("click", function(){
     event.preventDefault();
@@ -298,7 +340,15 @@ $("body").on("click", ".favorite", function(event){
         var animate = gif.attr("data-animate");
 
         //Create object for sessionStorage
-        var favGIF = 
+        var favGIF = {
+            "still": still,
+            "animate": animate
+        };
+
+        var favGIFStr = JSON.stringify(favGIF);
+        sessionStorage.setItem("fav-" + favIdCount, favGIFStr);
+
+        console.log(favGIF, favGIFStr)
 
         //Set the DOM elements
         var div = $("<div>")

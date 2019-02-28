@@ -68,8 +68,8 @@ Attempt to complete homework assignment as described in instructions. If unable 
 
 - [x] Integrate this search with additional APIs such as OMDB, or Bands in Town. Be creative and build something you are proud to showcase in your portfolio
 
-6. Allow users to add their favorite gifs to a `favorites` section.
-   -[x] This should persist even when they select or add a new topic.
+- [x] Allow users to add their favorite gifs to a `favorites` section.
+   * This should persist even when they select or add a new topic.
    * If you are looking for a major challenge, look into making this section persist even when the page is reloaded(via localStorage or cookies).
 
 ### Reminder: Submission on BCS
