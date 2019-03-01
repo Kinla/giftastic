@@ -60,4 +60,5 @@ This is a web paplication that provides some fun GIFs along side some TV show in
 3. Fuzzy search for TV show through OMDB API - using OMDB search result to populate topic button so it is spelled correctly
 4. A floating scroll up button.
 5. Option to remove Topic Buttons.
+6. Make it so user cannot save the same favorite GIFs more than once.
 
