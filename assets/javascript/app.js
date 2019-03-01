@@ -81,10 +81,11 @@ $("#submit").on("click", function(){
 
         $("#userShow").val("");
 
+        var newBTN = $(this).parent().parent().find(".topic").last();
+        newBTN.click();
+        
     } else {alert("Enter a TV Show name.")};
 
-    var newBTN = $(this).parent().parent().find(".topic").last();
-    newBTN.click();
 });
 
 //making sure text display of new button has title casing
