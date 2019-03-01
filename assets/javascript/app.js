@@ -213,6 +213,7 @@ $("body").on("click", ".topic", function(){
                 site.insertAfter("#star")
             };
 
+
         } else {};
 
     });
@@ -266,7 +267,7 @@ function giphyJsonDisplay(response){
         var gifRating = $("<h6>").addClass("card-subtitle text-muted").text("GIF rating: " + rating);
 
         $("#gifs")
-        .append(card
+        .prepend(card
             .append(img)
             .append(overlay
                 .append(favorite)
