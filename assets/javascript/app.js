@@ -167,7 +167,7 @@ $("body").on("click", ".topic", function(){
         } else {
             var jumbotron = $("<div>").addClass("jumbotron mt-2").attr({"id": "jumbo", "response": response.Response});
             var title = $("<h1>").addClass("display-4").text("Oops! This is not a TV show!");
-            var content = $("<p>").addClass("lead").html("Sorry no customized button for you! Perhaps you will still find some fun GIFs?");
+            var content = $("<p>").addClass("lead").html("Sorry, no customized button for you. Perhaps you will still find some fun GIFs?");
 
             $("#omdb").empty()
     
