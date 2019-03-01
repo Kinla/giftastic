@@ -323,12 +323,12 @@ $("body").on("click", ".save", function(event){
         }),
         mode: 'cors'
         })
-        .then(response => response.blob())
-        .then(blob => {
-        let blobUrl = window.URL.createObjectURL(blob);
+        .then(function(response) { return response.blob() })
+        .then(function(blob) {
+        var blobUrl = window.URL.createObjectURL(blob);
         forceDownload(blobUrl, filename);
         })
-        .catch(e => console.error(e));      
+        .catch(function(e) { return console.error(e) });   
 });
 
 //set up forceDownload function
