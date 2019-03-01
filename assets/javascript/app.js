@@ -23,7 +23,9 @@ function makeBtn(){
 
 //fill fav section with sessionStorage info
 function sessionFav(){
-    for (var i = 0; i < 10000; i++){
+    var count = sessionStorage.getItem("count")
+
+    for (var i = 0; i < count ; i++){
         var favStr = sessionStorage.getItem( "fav-" + i);
         var favObj = JSON.parse(favStr);
 
@@ -57,11 +59,12 @@ function sessionFav(){
                 .append(favorite)
             )
 
-        )
+        );
 
-    }
+    };
 
-}
+};
+
 //let user create new button
 $("#submit").on("click", function(){
     event.preventDefault();
@@ -91,7 +94,7 @@ String.prototype.toProperCase = function() {
     return results.join(' ');
 };
 
-//removing GIF and everything after from title
+//removing the string "GIF" and everything after from title
 String.prototype.removeWord = function(searchWord){
     var str = this;
     var n = str.search(searchWord);
@@ -122,8 +125,8 @@ $("body").on("click", ".topic", function(){
     $("#gifs").empty();
 
     //tryig OMDB again
-    var apikeyOMDB = "3182e777"
-    var queryURLOMDB = "http://www.omdbapi.com/?t=" + search + "&apikey=" + apikeyOMDB + "&plot=short&type=series"
+    var apikeyOMDB = "3182e777";
+    var queryURLOMDB = "http://www.omdbapi.com/?t=" + search + "&apikey=" + apikeyOMDB + "&plot=short&type=series";
 
     $.ajax({
         url: queryURLOMDB,
@@ -137,9 +140,9 @@ $("body").on("click", ".topic", function(){
         var genre = response.Genre;
         var year = response.Year;
         var rated = response.Rated;
-        var imdbID = response.imdbID
-        var imdbURL = "https://www.imdb.com/title/" + imdbID
-        console.log(response.Response)
+        var imdbID = response.imdbID;
+        var imdbURL = "https://www.imdb.com/title/" + imdbID;
+
         if (response.Response === "True"){
             //creating the DOM elements
             var jumbotron = $("<div>").addClass("jumbotron mt-2").attr({"id": "jumbo", "response": response.Response});
@@ -154,7 +157,7 @@ $("body").on("click", ".topic", function(){
                     "role": "button"
                 });
     
-            $("#omdb").empty()
+            $("#omdb").empty();
     
             $("#omdb")
             .append(jumbotron
@@ -163,19 +166,19 @@ $("body").on("click", ".topic", function(){
                 .append(content)
                 .append(star)
                 .append(imdb)      
-            )
+            );
         } else {
             var jumbotron = $("<div>").addClass("jumbotron mt-2").attr({"id": "jumbo", "response": response.Response});
             var title = $("<h1>").addClass("display-4").text("Oops! This is not a TV show!");
             var content = $("<p>").addClass("lead").html("Sorry, no customized button for you. Perhaps you will still find some fun GIFs?");
 
-            $("#omdb").empty()
+            $("#omdb").empty();
     
             $("#omdb")
             .append(jumbotron
                 .append(title)
                 .append(content)
-            )
+            );
 
             //delete from array + button
             topics.pop();
@@ -185,9 +188,10 @@ $("body").on("click", ".topic", function(){
     });
     
     //adding google knowledge search graph api
-    var apikeyGoogle = "AIzaSyDRjr7I7-G47aLjMpSaFl27trUzUNIyYd0"
-    var types = "TVSeries"
-    var queryURLGoogle = "https://kgsearch.googleapis.com/v1/entities:search?query=" + search + "&key=" + apikeyGoogle + "&types=" + types
+    var apikeyGoogle = "AIzaSyDRjr7I7-G47aLjMpSaFl27trUzUNIyYd0";
+    var types = "TVSeries";
+    var queryURLGoogle = "https://kgsearch.googleapis.com/v1/entities:search?query=" + search + "&key=" + apikeyGoogle + "&types=" + types;
+
     $.ajax({
         url: queryURLGoogle,
         method: "GET"
@@ -207,9 +211,9 @@ $("body").on("click", ".topic", function(){
     
             if (officialSite){
                 site.insertAfter("#star")
-            }
+            };
 
-        } else {}
+        } else {};
 
     });
     
@@ -235,7 +239,7 @@ function giphyJsonDisplay(response){
         var rating = giphy[i].rating.toUpperCase();
         var title = giphy[i].title.removeWord("GIF").toProperCase();
 
-        var card = $("<div>").addClass("card text-center")
+        var card = $("<div>").addClass("card text-center");
         var img = $("<img>")
             .addClass("card-img-top gif")
             .attr({
@@ -273,12 +277,10 @@ function giphyJsonDisplay(response){
                 .append(gifRating)
                 )
 
-        )
+        );
     
-    }
+    };
 };
-
-
 
 //toggle still/animate version of GIF
 $("body").on("click", ".overlay", function(){
@@ -290,7 +292,7 @@ $("body").on("click", ".overlay", function(){
         gif.attr("src", gif.attr("data-animate")).attr("data-state", "animate");
       } else {
         gif.attr("src", gif.attr("data-still")).attr("data-state", "still");
-      }
+      };
 
 });
 
@@ -347,14 +349,13 @@ var favIdCount = 0;
 //saving to favorite on click .favorite
 $("body").on("click", ".favorite", function(event){
     event.stopPropagation();
-    var gif = $(this).parent().parent().find(".gif")
+    var gif = $(this).parent().parent().find(".gif");
 
     if (sessionStorage.getItem("count")){
-        favIdCount = sessionStorage.getItem("count")
+        favIdCount = sessionStorage.getItem("count");
     } else {
-        favIdCount = 0
-    }
-
+        favIdCount = 0;
+    };
 
     if ($(this).hasClass("fas") === false){
         //change to solid heart
@@ -378,10 +379,6 @@ $("body").on("click", ".favorite", function(event){
         var favGIFStr = JSON.stringify(favGIF);
         sessionStorage.setItem("fav-" + favIdCount, favGIFStr);
 
-        // favIdCount in session storage
-
-        console.log(favGIF, favGIFStr)
-
         //Set the DOM elements
         var div = $("<div>")
             .addClass("card").addClass("mb-2").attr("id", "favID-" + favIdCount);
@@ -391,7 +388,7 @@ $("body").on("click", ".favorite", function(event){
                 "src": still,
                 "data-still": still,
                 "data-animate": animate,
-                "data-state": "still",
+                "data-state": "still"
             });
 
         var overlay =  $("<div>").addClass("card-img-overlay p-2 text-right overlay");
@@ -411,7 +408,7 @@ $("body").on("click", ".favorite", function(event){
                 .append(favorite)
             )
 
-        )
+        );
     
         
     } else {
@@ -421,6 +418,8 @@ $("body").on("click", ".favorite", function(event){
     }
 
     favIdCount++;
+
+    // favIdCount in session storage
     sessionStorage.setItem("count", favIdCount);
 
 });
