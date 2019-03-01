@@ -4,7 +4,7 @@ var topics = ["Star Trek", "Friends", "I Love Lucy", "Game of Thrones", "Stargat
 //ready page
 $(document).ready(function(){
     sessionStorage.removeItem("url");
-    
+
     makeBtn();
 
     if(sessionStorage.length > 0) {
@@ -26,40 +26,44 @@ function sessionFav(){
     var count = sessionStorage.getItem("count")
 
     for (var i = 0; i < count ; i++){
-        var favStr = sessionStorage.getItem( "fav-" + i);
-        var favObj = JSON.parse(favStr);
+        if (sessionStorage.getItem( "fav-" + i) !== null) {
+            var favStr = sessionStorage.getItem( "fav-" + i);
+            var favObj = JSON.parse(favStr);
 
-        var still = favObj.still;
-        var animate = favObj.animate;
+            var still = favObj.still;
+            var animate = favObj.animate;
 
-        var div = $("<div>")
-            .addClass("card").addClass("mb-2");
-        var img = $("<img>")
-            .addClass("gif card-image favImg")
+            var div = $("<div>")
+                .addClass("card").addClass("mb-2");
+            var img = $("<img>")
+                .addClass("gif card-image favImg")
+                .attr({
+                    "src": still,
+                    "data-still": still,
+                    "data-animate": animate,
+                    "data-state": "still",
+                });
+
+            var overlay =  $("<div>").addClass("card-img-overlay p-2 text-right overlay");
+            
+            var favorite = $("<a>")
+            .addClass("fas fa-heart mx-1 text-warning heartFull")
             .attr({
-                "src": still,
-                "data-still": still,
-                "data-animate": animate,
-                "data-state": "still",
+                "role": "button",
+                "data-fav": i
             });
+    
+    
+            $("#favs")
+            .append(div
+                .append(img)
+                .append(overlay
+                    .append(favorite)
+                )
+    
+            );
+        };
 
-        var overlay =  $("<div>").addClass("card-img-overlay p-2 text-right overlay");
-
-        var favorite = $("<a>")
-        .addClass("fas fa-heart mx-1 text-warning")
-        .attr({
-            "role": "button",
-        });
-
-
-        $("#favs")
-        .append(div
-            .append(img)
-            .append(overlay
-                .append(favorite)
-            )
-
-        );
 
     };
 
@@ -416,6 +420,9 @@ $("body").on("click", ".favorite", function(event){
         $(this).removeClass("fas").addClass("far");
         var count = $(this).attr("data-fav")
         $("#favID-" + count).remove();
+
+        sessionStorage.removeItem("fav-" + count);
+
     }
 
     favIdCount++;
@@ -430,4 +437,6 @@ $("body").on("click", ".heartFull", function(){
     $(this).parent().parent().remove();
     var count = $(this).attr("data-fav");
     $("#heart-" + count).removeClass("fas").addClass("far");
+    
+    sessionStorage.removeItem("fav-" + count);
 });
