@@ -193,9 +193,9 @@ $("body").on("click", ".topic", function(){
         method: "GET"
     })
     .then(function(response) {
-        
+
         var officialSite = response.itemListElement[0].result.url
-        if ($("#jumbo").attr(response)){
+        if ($("#jumbo").attr("response") === "True"){
             //creating the DOM elements
             var site = $("<a>").addClass("btn btn-warning mt-2 mr-3").text("Official Website")
             .attr({
