@@ -112,7 +112,7 @@ $("body").on("click", ".topic", function(){
     var apikey = "Ysk8hAo1O9ZJOdm0aKEeWGJeYeP3KT7M";
     var search = $(this).text().trim().split(" ").join("+");
     var name = $(this).text();
-    var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + search + "&api_key=" + apikey + "&limit=10&offset=";
+    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + search + "&api_key=" + apikey + "&limit=10&offset=";
 
     //use session storage to save URL
     sessionStorage.removeItem("url");
@@ -126,7 +126,7 @@ $("body").on("click", ".topic", function(){
 
     //tryig OMDB again
     var apikeyOMDB = "3182e777";
-    var queryURLOMDB = "http://www.omdbapi.com/?t=" + search + "&apikey=" + apikeyOMDB + "&plot=short&type=series";
+    var queryURLOMDB = "https://www.omdbapi.com/?t=" + search + "&apikey=" + apikeyOMDB + "&plot=short&type=series";
 
     $.ajax({
         url: queryURLOMDB,
