@@ -60,6 +60,6 @@ This is a web paplication that provides some fun GIFs along side some TV show in
 3. Fuzzy search for TV show through OMDB API - using OMDB search result to populate topic button so it is spelled correctly
 4. A floating scroll up button.
 5. Option to remove Topic Buttons.
-6. Make it so user cannot save the same favorite GIFs more than once.
-7. prob best to change display from card-columns to card-rows (which will have to be manually made with css as this is not a default class in bootstrap)
+6. Make it so user cannot save the same GIF more than once to the favorite section.
+7. Change display from card-columns to card-rows (which will have to be manually made with css as this is not a default class in bootstrap)
 
