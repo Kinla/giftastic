@@ -53,8 +53,9 @@ This is a web paplication that provides some fun GIFs along side some TV show in
       * My favorite list presists until browser window closes.
 
 ### Unsolved Issue / Possible Improvements
-1. All components to work corss browser and devices - currently only tested in Firefox + Chrome in Windows (PC).
-   * App fails in IE and all mobile devices.
+1. All components to work corss browser and devices.
+   * App is known to fail in IE. (JS / JQuery both doesn't run)
+   * App untested in MAC and Apple mobile.
 2. Would be great to not have the query form to have memories of previous submissions in Chrome -- This may be a Chorme thing?
 3. Fuzzy search for TV show through OMDB API - using OMDB search result to populate topic button so it is spelled correctly
 4. A floating scroll up button.
