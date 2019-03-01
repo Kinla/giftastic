@@ -102,10 +102,10 @@ String.prototype.removeWord = function(searchWord){
     return str.trim();
 }
 
-//display GIF when button clicked
+//display API results when button clicked
 $("body").on("click", ".topic", function(){
 
-    //parameters for giphy
+    //parameters for giphy + other APIs
     var apikey = "Ysk8hAo1O9ZJOdm0aKEeWGJeYeP3KT7M";
     var search = $(this).text().trim().split(" ").join("+");
     var name = $(this).text();
@@ -121,17 +121,8 @@ $("body").on("click", ".topic", function(){
     //reset div
     $("#gifs").empty();
 
-    //the ajax call for giphy
-    $.ajax({
-        url: queryURL,
-        method: "GET"
-    })
-    .then(function(response) {
-        giphyJsonDisplay(response);
-    });
-
     //tryig OMDB again
-    var apikeyOMDB = "trilogy"
+    var apikeyOMDB = "3182e777"
     var queryURLOMDB = "http://www.omdbapi.com/?t=" + search + "&apikey=" + apikeyOMDB + "&plot=short&type=series"
 
     $.ajax({
@@ -139,6 +130,7 @@ $("body").on("click", ".topic", function(){
         method: "GET"
     })
     .then(function(response) {
+
         var description = response.Plot;
         var actors = response.Actors;
         var rating = response.imdbRating;
@@ -147,30 +139,49 @@ $("body").on("click", ".topic", function(){
         var rated = response.Rated;
         var imdbID = response.imdbID
         var imdbURL = "https://www.imdb.com/title/" + imdbID
-        
-        //creating the DOM elements
-        var jumbotron = $("<div>").addClass("jumbotron mt-2").attr("id", "jumbo");
-        var title = $("<h1>").addClass("display-4").text(name);
-        var meta = $("<p>").text(rated + " | " + genre + " | TV Series(" + year + ") | IMDB Rating " + rating);
-        var star = $("<p>").attr("id", "star").text("Staring: " + actors);
-        var content = $("<p>").addClass("lead").text(description);
-        var imdb = $("<a>").addClass("btn btn-warning mt-2").text("More on IMDB")
-            .attr({
-                "href": imdbURL,
-                "target": "_blank",
-                "role": "button"
-            });
+        console.log(response.Response)
+        if (response.Response === "True"){
+            //creating the DOM elements
+            var jumbotron = $("<div>").addClass("jumbotron mt-2").attr({"id": "jumbo", "response": response.Response});
+            var title = $("<h1>").addClass("display-4").text(name);
+            var meta = $("<p>").text(rated + " | " + genre + " | TV Series (" + year + ") | IMDB Rating " + rating);
+            var star = $("<p>").attr("id", "star").text("Staring: " + actors);
+            var content = $("<p>").addClass("lead").text(description);
+            var imdb = $("<a>").addClass("btn btn-warning mt-2").text("More on IMDB")
+                .attr({
+                    "href": imdbURL,
+                    "target": "_blank",
+                    "role": "button"
+                });
+    
+            $("#omdb").empty()
+    
+            $("#omdb")
+            .append(jumbotron
+                .append(title)
+                .append(meta)
+                .append(content)
+                .append(star)
+                .append(imdb)      
+            )
+        } else {
+            var jumbotron = $("<div>").addClass("jumbotron mt-2").attr({"id": "jumbo", "response": response.Response});
+            var title = $("<h1>").addClass("display-4").text("Oops! This is not a TV show!");
+            var content = $("<p>").addClass("lead").html("Sorry no customized button for you! Perhaps you will still find some fun GIFs?");
 
-        $("#omdb").empty()
+            $("#omdb").empty()
+    
+            $("#omdb")
+            .append(jumbotron
+                .append(title)
+                .append(content)
+            )
 
-        $("#omdb")
-        .append(jumbotron
-            .append(title)
-            .append(meta)
-            .append(content)
-            .append(star)
-            .append(imdb)      
-        )
+            //delete from array + button
+            topics.pop();
+            makeBtn();
+
+        }
     });
     
     //adding google knowledge search graph api
@@ -184,22 +195,32 @@ $("body").on("click", ".topic", function(){
     .then(function(response) {
         
         var officialSite = response.itemListElement[0].result.url
+        if ($("#jumbo").attr(response)){
+            //creating the DOM elements
+            var site = $("<a>").addClass("btn btn-warning mt-2 mr-3").text("Official Website")
+            .attr({
+                "href": officialSite,
+                "target": "_blank",
+                "role": "button"
+            });
+    
+    
+            if (officialSite){
+                site.insertAfter("#star")
+            }
 
-        //creating the DOM elements
-        var site = $("<a>").addClass("btn btn-warning mt-2 mr-3").text("Official Website")
-        .attr({
-            "href": officialSite,
-            "target": "_blank",
-            "role": "button"
-        });
-
-
-        if (officialSite){
-            site.insertAfter("#star")
-        }
+        } else {}
 
     });
     
+    //the ajax call for giphy
+    $.ajax({
+        url: queryURL,
+        method: "GET"
+    })
+    .then(function(response) {
+        giphyJsonDisplay(response);
+    });
 
 });
 
