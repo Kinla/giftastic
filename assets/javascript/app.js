@@ -153,7 +153,7 @@ $("body").on("click", ".topic", function(){
             var jumbotron = $("<div>").addClass("jumbotron mt-2").attr({"id": "jumbo", "response": response.Response});
             var title = $("<h1>").addClass("display-4").text(name);
             var meta = $("<p>").text(rated + " | " + genre + " | TV Series (" + year + ") | IMDB Rating " + rating);
-            var star = $("<p>").attr("id", "star").text("Staring: " + actors);
+            var star = $("<p>").attr("id", "star").text("Starring: " + actors);
             var content = $("<p>").addClass("lead").text(description);
             var imdb = $("<a>").addClass("btn btn-warning mt-2").text("More on IMDB")
                 .attr({
