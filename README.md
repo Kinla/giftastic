@@ -62,4 +62,5 @@ This is a web paplication that provides some fun GIFs along side some TV show in
 5. Option to remove Topic Buttons.
 6. Make it so user cannot save the same GIF more than once to the favorite section.
 7. Change display from card-columns to card-rows (which will have to be manually made with css as this is not a default class in bootstrap)
+8. Change alert to modal (https://getbootstrap.com/docs/4.3/components/modal/)
 
