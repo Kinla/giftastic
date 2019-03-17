@@ -6,6 +6,8 @@ This is a web application that provides some fun GIFs along side some TV show in
 
 Site is published at https://kinla.github.io/giftastic/.
 
+- - -
+
 ### Techonologies
 - HTML
 - CSS / Bootstrap
@@ -14,6 +16,8 @@ Site is published at https://kinla.github.io/giftastic/.
    * OMDB API
    * Giphy API
    * Google Knowledge Search API
+
+- - -
 
 ### Components
 
@@ -53,6 +57,8 @@ Site is published at https://kinla.github.io/giftastic/.
          * If the GIF is still displayed in the GIF section - click on heart to change from solid to open - will remove GIF from list
          * If the GIF is only displayed in the GIF section - click on heart to remove GIF from list
       * My favorite list presists until browser window closes.
+
+- - -
 
 ### Unsolved Issue / Possible Improvements
 1. All components to work corss browser and devices.
