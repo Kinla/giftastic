@@ -2,9 +2,11 @@
 
 ### Overview
 
-This is a web paplication that provides some fun GIFs along side some TV show info. It is supposed to be solely a TV show related app. However, the GIF part is open to all queries by design choice. AFter all, we all need to look up some cat GIFs from time to time.
+This is a web application that provides some fun GIFs along side some TV show info. It is supposed to be solely a TV show related app. However, the GIF part is open to all queries by design choice. AFter all, we all need to look up some cat GIFs from time to time.
 
-### Dev Tool Set
+Site is published at https://kinla.github.io/giftastic/.
+
+### Techonologies
 - HTML
 - CSS / Bootstrap
 - JavaScript / JQuery
@@ -57,7 +59,7 @@ This is a web paplication that provides some fun GIFs along side some TV show in
    * App is known to fail in IE. (JS / JQuery both doesn't run)
    * App untested in MAC and Apple mobile.
 2. Would be great to not have the query form to have memories of previous submissions in Chrome -- This may be a Chorme thing?
-3. Fuzzy search for TV show through OMDB API - using OMDB search result to populate topic button so it is spelled correctly
+3. Fuzzy search and auto completing search string for TV show through OMDB API - using OMDB search result to populate topic button so it is spelled correctly
 4. A floating scroll up button.
 5. Option to remove Topic Buttons.
 6. Make it so user cannot save the same GIF more than once to the favorite section.
